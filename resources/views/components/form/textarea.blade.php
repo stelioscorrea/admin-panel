@@ -1,0 +1,28 @@
+@props([
+    'label' => null,
+    'name',
+    'value' => null,
+    'rows' => 4,
+    'placeholder' => '',
+    'required' => false,
+])
+
+<div class="mb-3">
+    @if($label)
+        <label for="{{ $name }}" class="form-label">
+            {{ $label }}
+            @if($required) <span class="text-danger">*</span> @endif
+        </label>
+    @endif
+    <textarea
+        id="{{ $name }}"
+        name="{{ $name }}"
+        rows="{{ $rows }}"
+        placeholder="{{ $placeholder }}"
+        {{ $required ? 'required' : '' }}
+        {{ $attributes->merge(['class' => 'form-control' . ($errors->has($name) ? ' is-invalid' : '')]) }}
+    >{{ old($name, $value) }}</textarea>
+    @error($name)
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>

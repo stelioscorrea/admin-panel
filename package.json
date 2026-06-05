@@ -8,6 +8,7 @@
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
+        "bootstrap-icons": "^1.13.1",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^3.1",
         "sass-embedded": "^1.100.0",
