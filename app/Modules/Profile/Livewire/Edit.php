@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Livewire\Profile;
+namespace App\Modules\Profile\Livewire;
 
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class Edit extends Component
 {
+    protected string $view = 'modules.profile.edit';
+
     public string $name = '';
 
     public string $email = '';
@@ -74,7 +76,7 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.profile.edit')
+        return view($this->view)
             ->layout('components.layouts.app');
     }
 }

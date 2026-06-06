@@ -1,7 +1,7 @@
 <?php
 
-use App\Livewire\Profile\Edit;
 use App\Models\User;
+use App\Modules\Profile\Livewire\Edit;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 

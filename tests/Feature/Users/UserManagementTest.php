@@ -1,9 +1,9 @@
 <?php
 
-use App\Livewire\Users\Create;
-use App\Livewire\Users\Edit;
-use App\Livewire\Users\Index;
 use App\Models\User;
+use App\Modules\Users\Livewire\Create;
+use App\Modules\Users\Livewire\Edit;
+use App\Modules\Users\Livewire\Index;
 use Livewire\Livewire;
 
 test('admin can view user listing', function () {

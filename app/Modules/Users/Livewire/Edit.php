@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Users;
+namespace App\Modules\Users\Livewire;
 
 use App\Enums\UserRole;
 use App\Models\User;
@@ -8,6 +8,8 @@ use Livewire\Component;
 
 class Edit extends Component
 {
+    protected string $view = 'modules.users.edit';
+
     public User $user;
 
     public string $name = '';
@@ -73,7 +75,7 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.users.edit', [
+        return view($this->view, [
             'roles' => collect(UserRole::cases())->mapWithKeys(fn ($r) => [$r->value => $r->label()]),
         ])->layout('components.layouts.app');
     }

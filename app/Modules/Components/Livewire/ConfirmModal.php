@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Livewire\Components;
+namespace App\Modules\Components\Livewire;
 
 use Livewire\Component;
 
 class ConfirmModal extends Component
 {
+    protected string $view = 'modules.components.confirm-modal';
+
     public bool $show = false;
 
     public string $title = 'Confirmar ação';
@@ -44,6 +46,6 @@ class ConfirmModal extends Component
 
     public function render()
     {
-        return view('livewire.components.confirm-modal');
+        return view($this->view);
     }
 }

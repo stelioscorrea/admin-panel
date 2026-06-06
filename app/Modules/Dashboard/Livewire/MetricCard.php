@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Livewire\Dashboard;
+namespace App\Modules\Dashboard\Livewire;
 
 use Livewire\Component;
 
 class MetricCard extends Component
 {
+    protected string $view = 'modules.dashboard.metric-card';
+
     public string $title = '';
 
     public int|string $value = 0;
@@ -16,6 +18,6 @@ class MetricCard extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.metric-card');
+        return view($this->view);
     }
 }

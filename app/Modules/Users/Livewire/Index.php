@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Users;
+namespace App\Modules\Users\Livewire;
 
 use App\Models\User;
 use Livewire\Component;
@@ -9,6 +9,8 @@ use Livewire\WithPagination;
 class Index extends Component
 {
     use WithPagination;
+
+    protected string $view = 'modules.users.index';
 
     public string $search = '';
 
@@ -80,7 +82,7 @@ class Index extends Component
             ->orderBy($this->sortBy, $this->sortDir)
             ->paginate($this->perPage);
 
-        return view('livewire.users.index', ['users' => $users])
+        return view($this->view, ['users' => $users])
             ->layout('components.layouts.app');
     }
 }
