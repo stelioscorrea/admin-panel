@@ -9,8 +9,29 @@ Este projeto utiliza o **Laravel Boost**. Todas as interações devem seguir rig
 
 ## Visão Geral do Projeto
 - **Stack:** PHP 8.4, Laravel 13, Livewire 4, AdminLTE 4, Tailwind CSS 4.
-- **Layout:** Centralizado em `resources/views/layouts/app.blade.php`.
+- **Arquitetura:** Modular — cada feature vive em `app/Modules/<Nome>/` com seus componentes Livewire e arquivo `routes.php` próprio.
 - **Database:** SQLite por padrão no desenvolvimento.
+
+### Estrutura de Módulos
+
+```
+app/Modules/
+├── Components/Livewire/   # Componentes compartilhados (ex: ConfirmModal)
+├── Dashboard/Livewire/    # Dashboard com métricas
+├── Profile/Livewire/      # Perfil do usuário autenticado
+└── Users/Livewire/        # Gerenciamento de usuários (CRUD)
+```
+
+Cada módulo possui um `routes.php` carregado automaticamente pelo `AppServiceProvider::loadModuleRoutes()` via glob — sem necessidade de editar `routes/web.php`.
+
+Os aliases Livewire são registrados explicitamente em `AppServiceProvider::registerLivewireModules()` (ex: `'dashboard.metric-card'` → `App\Modules\Dashboard\Livewire\MetricCard::class`).
+
+### Adicionando um novo módulo
+
+1. Criar `app/Modules/<Nome>/Livewire/` e `app/Modules/<Nome>/routes.php`
+2. Criar views em `resources/views/modules/<nome>/`
+3. Registrar aliases no `AppServiceProvider::registerLivewireModules()`
+4. As rotas são carregadas automaticamente na próxima requisição
 
 ## Comandos Essenciais
 
@@ -28,8 +49,8 @@ Este projeto utiliza o **Laravel Boost**. Todas as interações devem seguir rig
 
 ## Convenções de Desenvolvimento
 - **Agentic Workflow:** Antes de qualquer mudança de código, use `search-docs` (via MCP) para validar a abordagem.
-- **Modern PHP:** Use atributos para configuração de models (ex: `#[Fillable]`) e *constructor property promotion*.
-- **Frontend:** Componentes Livewire são preferidos para interatividade.
+- **Modern PHP:** Use *constructor property promotion* e type hints explícitos.
+- **Frontend:** Componentes Livewire são preferidos para interatividade; declare sempre `protected string $view` no componente.
 - **Estilização:** AdminLTE fornece a base; Tailwind 4 é usado para ajustes finos.
 
 Para detalhes completos de arquitetura e regras de codificação, consulte o arquivo **[AGENTS.md](./AGENTS.md)**.

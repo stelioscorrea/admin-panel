@@ -1,58 +1,142 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Admin Panel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, enterprise-grade administrative dashboard built with **Laravel 13**, **Livewire 4**, and **AdminLTE 4**. Designed as a solid boilerplate for building admin interfaces with authentication, role-based access control, user management, and a modular architecture ready to scale.
 
-## About Laravel
+![Tests](https://img.shields.io/badge/tests-28%20passing-brightgreen)
+![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php)
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel)
+![Livewire](https://img.shields.io/badge/Livewire-4-4E56A6)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- 🔐 **Authentication** — login/logout with session-based auth and guest middleware
+- 👥 **User Management** — CRUD with search, sort, pagination, and active/inactive toggle
+- 🛡️ **Role-Based Access Control** — `admin` and `user` roles with middleware protection
+- 📊 **Dashboard** — metrics cards showing total, active, admin, and inactive user counts
+- 👤 **User Profile** — update name, email, and password with validation
+- 🧩 **Modular Architecture** — feature modules auto-loaded without touching `routes/web.php`
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Stack
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Layer | Technology |
+|---|---|
+| Language | PHP 8.4 |
+| Framework | Laravel 13 |
+| Reactive UI | Livewire 4 |
+| Admin Theme | AdminLTE 4 |
+| CSS Framework | Tailwind CSS 4 + Bootstrap 5 |
+| Build Tool | Vite 6 |
+| Database | SQLite (development) |
+| Testing | Pest 4 |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## Requirements
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- PHP 8.4+
+- Composer
+- Node.js 18+ and npm
+
+---
+
+## Setup
 
 ```bash
-composer require laravel/boost --dev
+# Clone the repository
+git clone <repository-url> admin-panel
+cd admin-panel
 
-php artisan boost:install
+# Install all dependencies, configure env, run migrations, and build assets
+composer setup
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+> **Manual setup** (if `composer setup` is unavailable):
+> ```bash
+> composer install
+> cp .env.example .env
+> php artisan key:generate
+> php artisan migrate
+> npm install && npm run build
+> ```
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Essential Commands
 
-## Code of Conduct
+```bash
+# Start server, queue, logs, and Vite concurrently
+composer dev
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Run the test suite
+composer test
 
-## Security Vulnerabilities
+# List all registered routes
+php artisan route:list --except-vendor
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Format PHP code to project style
+vendor/bin/pint
+```
+
+---
+
+## Architecture
+
+The application follows a **feature module** pattern. Each functional area lives in a self-contained directory under `app/Modules/`:
+
+```
+app/Modules/
+├── Components/
+│   └── Livewire/ConfirmModal.php       # Shared modal component
+├── Dashboard/
+│   ├── Livewire/{Index,MetricCard}.php
+│   └── routes.php
+├── Profile/
+│   ├── Livewire/Edit.php
+│   └── routes.php
+└── Users/
+    ├── Livewire/{Index,Create,Edit}.php
+    └── routes.php
+
+resources/views/modules/
+├── components/  dashboard/  profile/  users/
+```
+
+### How it works
+
+**Route auto-loading** — `AppServiceProvider::loadModuleRoutes()` globs `app/Modules/*/routes.php` and registers each file under `web` + `auth` middleware. Adding a new module never requires changes to `routes/web.php`.
+
+**Livewire aliases** — `AppServiceProvider::registerLivewireModules()` registers explicit component aliases (e.g. `dashboard.metric-card` → `App\Modules\Dashboard\Livewire\MetricCard`), keeping Blade templates clean.
+
+**Adding a new module:**
+
+1. Create `app/Modules/<Name>/Livewire/` and `app/Modules/<Name>/routes.php`
+2. Create views at `resources/views/modules/<name>/`
+3. Register Livewire aliases in `AppServiceProvider::registerLivewireModules()`
+4. The module routes are picked up automatically on the next request
+
+---
+
+## Testing
+
+```bash
+# Run all tests (compact output)
+php artisan test --compact
+
+# Run a specific test file
+php artisan test --compact tests/Feature/Users/UserManagementTest.php
+
+# Filter by test name
+php artisan test --compact --filter=admin_can_create_a_user
+```
+
+The test suite covers authentication, access control, user management (CRUD, toggle active, search), profile editing (name, email, password), and the navbar.
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
